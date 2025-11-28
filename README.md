@@ -69,7 +69,14 @@ A command-line application for managing gym memberships with cost calculations, 
    # Linux/Mac
    source .venv/bin/activate
    ```
-3. No external packages are required (uses only Python standard library)
+3. Install dependencies:
+   ```bash
+   # For running the application (no external packages required)
+   pip install -r requirements.txt
+   
+   # For development (testing, linting)
+   pip install -r requirements-dev.txt
+   ```
 
 ## Usage
 
@@ -156,16 +163,34 @@ Confirm this membership? (yes/no): yes
 
 ## Running Tests
 
-Run all unit tests:
+### Using pytest (Recommended)
+
+First, install development dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+Then run tests:
+
+```bash
+# Run all tests with verbose output
+pytest test_gym_membership.py -v
+
+# Run tests with coverage report
+pytest test_gym_membership.py -v --cov=. --cov-report=term-missing
+
+# Run specific test class
+pytest test_gym_membership.py::TestGymMembershipSystem -v
+
+# Run specific test
+pytest test_gym_membership.py::TestGymMembershipSystem::test_calculate_total_cost_basic_no_features -v
+```
+
+### Using unittest (Legacy)
 
 ```bash
 python -m unittest test_gym_membership.py -v
-```
-
-Or using pytest (if installed):
-
-```bash
-pytest test_gym_membership.py -v
 ```
 
 ## Design Patterns Applied
@@ -231,6 +256,16 @@ The codebase follows **Separation of Concerns** principle with modular architect
 
 Each module has a single responsibility and can be tested independently.
 
+## Continuous Integration
+
+The project includes GitHub Actions workflows for automated testing and linting:
+
+- **Linting**: Runs pylint on all Python files
+- **Testing**: Runs pytest with coverage reporting
+- **Triggers**: Runs on push, pull requests, and manual dispatch
+
+The workflow is configured in `.github/workflows/ci.yml` and uses `requirements-dev.txt` for dependencies.
+
 ## Testing
 
 The project includes comprehensive unit tests covering:
@@ -242,7 +277,7 @@ The project includes comprehensive unit tests covering:
 - Edge cases and boundary conditions
 - Error handling
 
-All 46 tests pass successfully.
+All 46 tests pass successfully using pytest framework.
 
 ## API Usage (Programmatic)
 
